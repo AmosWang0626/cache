@@ -34,5 +34,12 @@ scrape_configs:
   - job_name: 'cache-job'
     scrape_interval: 5s
     metrics_path: '/actuator/prometheus'
-    file_sd_configs:
-      - files: [ '/app/config/*.yml' ]
+    static_configs:
+      - targets: [ '192.168.31.218:8801' ]
+        labels:
+          instance: mall-cache
+          service: mall-cache-svc
+      - targets: [ '192.168.31.218:8802' ]
+        labels:
+          instance: mall-product
+          service: mall-product-svc

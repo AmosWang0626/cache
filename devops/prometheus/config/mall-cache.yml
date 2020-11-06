@@ -1,0 +1,5 @@
+# job file_sd_configs
+- targets: [ '192.168.1.119:8801' ]
+  labels:
+    instance: mall-cache
+    service: mall-cache-svc

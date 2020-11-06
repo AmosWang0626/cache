@@ -1,0 +1,12 @@
+version: '2'
+services:
+  prometheus:
+    image: prom/prometheus
+    # close restart always, because the application may not start.
+    #restart: always
+    container_name: prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - /app/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /app/docker/prometheus/config:/app/config
