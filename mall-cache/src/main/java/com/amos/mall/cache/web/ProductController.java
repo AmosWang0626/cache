@@ -1,11 +1,13 @@
 package com.amos.mall.cache.web;
 
+import com.amos.mall.cache.hystrix.command.CityNameCommand;
 import com.amos.mall.cache.hystrix.command.ProductCommand;
 import com.amos.mall.cache.hystrix.command.ProductsCommand;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixObservableCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rx.Observable;
 import rx.Observer;
+
+import java.util.Random;
 
 /**
  * 模块名称: cache
@@ -34,6 +38,15 @@ public class ProductController {
         /// command.execute() 同步方式执行; command.queue() 异步方式执行
         JSONObject object = command.execute();
         LOGGER.info("获取商品信息 >>> [{}]", object);
+
+
+        // 基于信号量技术，进行本地复杂逻辑方法的限流
+        long cityId = new Random().nextBoolean() ? 1000L : new Random().nextBoolean() ? 2000L : 3000L;
+        try {
+            object.put("城市", new CityNameCommand(cityId).execute());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         /// 异步拿到接口返回结果
         // Future<JSONObject> queue = new ProductCommand(name).queue();
