@@ -38,7 +38,7 @@ public class CaffeineController {
             .build();
 
     static {
-        for (int i = 0; i < 150; i++) {
+        for (int i = 0; i < 10; i++) {
             CACHE.put("key" + i, "value_" + getValue());
         }
     }

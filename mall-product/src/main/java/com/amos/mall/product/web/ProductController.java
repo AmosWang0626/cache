@@ -1,5 +1,7 @@
 package com.amos.mall.product.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,9 @@ import java.util.UUID;
 @RequestMapping("product")
 public class ProductController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
+
+
     @GetMapping
     public String get() {
 
@@ -34,7 +39,7 @@ public class ProductController {
             // 根据方法名调用本类中的其他方法
             return (String) this.getClass().getMethod("mac" + model).invoke(this);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
+            LOGGER.error("获取信息异常 [{}], 详细信息: [{}]",e.getClass().getSimpleName(),  e.getMessage());
         }
 
         return random();

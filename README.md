@@ -10,3 +10,9 @@
 - Ehcache
 - Guava
 - Caffeine
+
+---
+
+## 缓存分布式架构笔记
+
+![](doc/缓存分布式架构笔记.jpg)
