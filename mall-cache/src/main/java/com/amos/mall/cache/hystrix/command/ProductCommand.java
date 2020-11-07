@@ -1,8 +1,7 @@
 package com.amos.mall.cache.hystrix.command;
 
 import com.amos.mall.cache.config.ApplicationContext;
-import com.netflix.hystrix.HystrixCommand;
-import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.*;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 
@@ -17,7 +16,10 @@ public class ProductCommand extends HystrixCommand<JSONObject> {
     private final String name;
 
     public ProductCommand(String name) {
-        super(HystrixCommandGroupKey.Factory.asKey("ProductCommand"));
+        super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ProductGroup"))
+                .andCommandKey(HystrixCommandKey.Factory.asKey("ProductCommand"))
+                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("ProductThreadPool"))
+                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter().withCoreSize(10).withQueueSizeRejectionThreshold(5)));
         this.name = name;
     }
 
