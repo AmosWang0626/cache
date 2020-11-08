@@ -1,4 +1,4 @@
-package com.amos.mall.cache.web;
+package com.amos.mall.cache.web.cache;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;

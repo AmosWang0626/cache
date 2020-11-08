@@ -1,4 +1,4 @@
-package com.amos.mall.cache.web;
+package com.amos.mall.cache.web.cache;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;

@@ -1,4 +1,4 @@
-package com.amos.mall.cache.web;
+package com.amos.mall.cache.web.hystrix;
 
 import com.amos.mall.cache.hystrix.command.CityNameCommand;
 import com.amos.mall.cache.hystrix.command.ProductCommand;
