@@ -54,7 +54,7 @@ public class ProductController {
             object.put("处理器", new Random().nextBoolean() ? "4 核 Intel Core i7" : "8 核 Intel Core i9");
             object.put("内存", new Random().nextBoolean() ? "32GB" : "64GB");
             object.put("磁盘", new Random().nextBoolean() ? "4TB" : "8TB");
-            object.put("图形处理器", new Random().nextBoolean() ? "Intel Iris Plus Graphics" : "最高可选配 AMD Radeon Pro 5600M (配备 8GB HBM2 显存)");
+            object.put("图形处理器", new Random().nextBoolean() ? "Intel Iris Plus Graphics" : "AMD Radeon Pro 5600M (配备 8GB HBM2 显存)");
             object.put("电池续航", new Random().nextBoolean() ? "最长可达 10 小时" : "最长可达 11 小时");
             object.put("键盘和触控板", "背光妙控键盘、触控栏、触控 ID 和力度触控板");
         } catch (JSONException ignored) {
@@ -90,7 +90,7 @@ public class ProductController {
             object.put("处理器", "8 核 Intel Core i9");
             object.put("内存", "64GB");
             object.put("磁盘", "8TB");
-            object.put("图形处理器", "最高可选配 AMD Radeon Pro 5600M (配备 8GB HBM2 显存)");
+            object.put("图形处理器", "AMD Radeon Pro 5600M (配备 8GB HBM2 显存)");
             object.put("电池续航", "最长可达 11 小时");
             object.put("键盘和触控板", "背光妙控键盘、触控栏、触控 ID 和力度触控板");
         } catch (JSONException ignored) {

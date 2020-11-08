@@ -37,7 +37,16 @@ public class ProductController {
 
         /// command.execute() 同步方式执行; command.queue() 异步方式执行
         JSONObject object = command.execute();
-        LOGGER.info("获取商品信息 >>> [{}]", object);
+
+        String info = "获取商品信息";
+        if (command.isResponseFromCache()) {
+            info += ",来自缓存";
+        }
+        if (command.isResponseFromFallback()) {
+            info += ",来自降级";
+        }
+        info += " >>> [{}]";
+        LOGGER.info(info, object);
 
 
         // 基于信号量技术，进行本地复杂逻辑方法的限流
