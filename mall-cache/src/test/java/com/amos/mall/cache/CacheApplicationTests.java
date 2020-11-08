@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * 模块名称: cache
@@ -55,6 +56,30 @@ public class CacheApplicationTests {
         name = "13";
         getProductInfo(name, url, 2);
 
+    }
+
+    /**
+     * 测试请求过多走降级逻辑，避免服务大流量被打死
+     */
+    @Test
+    void testRequestReject() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(30);
+
+        Thread[] planThreads = new Thread[30];
+        for (int i = 0; i < 30; i++) {
+            int currentIndex = i;
+            planThreads[i] = new Thread(() -> {
+                ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8801/product/16", String.class);
+                if (response.getStatusCode().is2xxSuccessful()) {
+                    System.out.printf("获取商品信息 [%s] [%s]\n", currentIndex, response.getBody());
+                }
+
+                countDownLatch.countDown();
+            });
+            planThreads[i].start();
+        }
+
+        countDownLatch.await();
     }
 
     private void getProductInfo(String name, String url, int pollNum) {

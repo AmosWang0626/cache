@@ -25,9 +25,21 @@ public class ProductCommand extends HystrixCommand<JSONObject> {
                         // 异常率达到40%，就打开短路器
                         .withCircuitBreakerErrorThresholdPercentage(40)
                         // 打开短路器6秒后，half-open，让一个请求通过短路器，试探一下
-                        .withCircuitBreakerSleepWindowInMilliseconds(6000))
+                        .withCircuitBreakerSleepWindowInMilliseconds(6000)
+                        // 超时配置
+                        .withExecutionTimeoutInMilliseconds(20000)
+                        // 降级 隔离 信号量 最大并发请求数
+                        .withFallbackIsolationSemaphoreMaxConcurrentRequests(30))
                 .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("ProductThreadPool"))
-                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter().withCoreSize(10).withQueueSizeRejectionThreshold(5)));
+                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()
+                        // 线程池大小
+                        .withCoreSize(10)
+                        // 下边这两个参数，取较小的值
+                        // 1. 等待队列，缓存队列最大容量
+                        .withMaxQueueSize(12)
+                        // 2. 等待队列达到这个容量，就会触发拒绝逻辑
+                        .withQueueSizeRejectionThreshold(15))
+        );
         this.name = name;
     }
 
@@ -46,10 +58,10 @@ public class ProductCommand extends HystrixCommand<JSONObject> {
         return null;
     }
 
-    @Override
-    protected String getCacheKey() {
-        return "product_cache_key_" + name;
-    }
+//    @Override
+//    protected String getCacheKey() {
+//        return "product_cache_key_" + name;
+//    }
 
     @Override
     protected JSONObject getFallback() {
