@@ -1,6 +1,6 @@
 package com.amos.mall.cache.hystrix.command;
 
-import com.amos.mall.cache.config.ApplicationContext;
+import com.amos.mall.cache.config.ApplicationBeanUtils;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixObservableCommand;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -30,7 +30,7 @@ public class ProductsCommand extends HystrixObservableCommand<JSONObject> {
             try {
                 for (String name : names) {
                     String url = "http://localhost:8802/product/" + name;
-                    ResponseEntity<String> responseEntity = ApplicationContext.getRestTemplate().getForEntity(url, String.class);
+                    ResponseEntity<String> responseEntity = ApplicationBeanUtils.getRestTemplate().getForEntity(url, String.class);
                     if (responseEntity.getStatusCode().is2xxSuccessful()) {
                         subscriber.onNext(new JSONObject(responseEntity.getBody()));
                     }

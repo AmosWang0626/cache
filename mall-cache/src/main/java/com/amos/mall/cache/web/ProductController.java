@@ -89,4 +89,17 @@ public class ProductController {
         return "success";
     }
 
+    @GetMapping("cache/{names}")
+    public String productCache(@PathVariable("names") String names) {
+
+        for (String name : names.split(",")) {
+            HystrixCommand<JSONObject> command = new ProductCommand(name);
+
+            JSONObject object = command.execute();
+            LOGGER.info("获取商品信息[来自缓存: {}] >>> [{}]", command.isResponseFromCache(), object);
+        }
+
+        return "success";
+    }
+
 }

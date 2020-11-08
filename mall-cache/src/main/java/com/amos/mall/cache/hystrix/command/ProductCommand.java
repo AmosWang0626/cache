@@ -1,6 +1,6 @@
 package com.amos.mall.cache.hystrix.command;
 
-import com.amos.mall.cache.config.ApplicationContext;
+import com.amos.mall.cache.config.ApplicationBeanUtils;
 import com.netflix.hystrix.*;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +26,16 @@ public class ProductCommand extends HystrixCommand<JSONObject> {
     @Override
     protected JSONObject run() throws Exception {
         String url = "http://localhost:8802/product/" + name;
-        ResponseEntity<String> responseEntity = ApplicationContext.getRestTemplate().getForEntity(url, String.class);
+        ResponseEntity<String> responseEntity = ApplicationBeanUtils.getRestTemplate().getForEntity(url, String.class);
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return new JSONObject(responseEntity.getBody());
         }
 
         return null;
+    }
+
+    @Override
+    protected String getCacheKey() {
+        return "product_cache_key_" + name;
     }
 }
