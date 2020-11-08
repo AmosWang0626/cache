@@ -27,7 +27,7 @@ public class ProductCommand extends HystrixCommand<JSONObject> {
                         // 打开短路器6秒后，half-open，让一个请求通过短路器，试探一下
                         .withCircuitBreakerSleepWindowInMilliseconds(6000)
                         // 超时配置
-                        .withExecutionTimeoutInMilliseconds(20000)
+                        .withExecutionTimeoutInMilliseconds(1000)
                         // 降级 隔离 信号量 最大并发请求数
                         .withFallbackIsolationSemaphoreMaxConcurrentRequests(30))
                 .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("ProductThreadPool"))
@@ -47,6 +47,10 @@ public class ProductCommand extends HystrixCommand<JSONObject> {
     protected JSONObject run() throws Exception {
         if ("1".equals(name)) {
             throw new RuntimeException("The Product not found!");
+        }
+
+        if ("2".equals(name)) {
+            Thread.sleep(1000);
         }
 
         String url = "http://localhost:8802/product/" + name;

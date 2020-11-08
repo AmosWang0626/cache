@@ -82,6 +82,17 @@ public class CacheApplicationTests {
         countDownLatch.await();
     }
 
+    /**
+     * 测试请求超时逻辑
+     */
+    @Test
+    void testTimeout() {
+        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8801/product/2", String.class);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            System.out.printf("获取商品信息 [%s]\n", response.getBody());
+        }
+    }
+
     private void getProductInfo(String name, String url, int pollNum) {
         for (int i = 0; i < pollNum; i++) {
             ResponseEntity<String> response = restTemplate.getForEntity(url + name, String.class);
